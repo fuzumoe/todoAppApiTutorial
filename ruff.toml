@@ -1,0 +1,131 @@
+# Ruff configuration file
+# This file provides additional Ruff configuration beyond pyproject.toml
+
+# Extend pyproject.toml configuration
+extend = "pyproject.toml"
+
+# Basic settings
+target-version = "py311"
+line-length = 88
+indent-width = 4
+
+# File inclusion/exclusion patterns
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+    # Django specific
+    "*/migrations/*",
+    "manage.py",
+    "*/settings/*.py",
+]
+
+[lint]
+# Enable specific rule sets
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # Pyflakes
+    "UP",     # pyupgrade
+    "B",      # flake8-bugbear
+    "SIM",    # flake8-simplify
+    "I",      # isort
+    "N",      # pep8-naming
+    "DJ",     # flake8-django
+    "C4",     # flake8-comprehensions
+    "DTZ",    # flake8-datetimez
+    "T20",    # flake8-print
+    "RET",    # flake8-return
+    "PIE",    # flake8-pie
+    "PT",     # flake8-pytest-style
+    "ERA",    # eradicate
+    "RUF",    # Ruff-specific rules
+]
+
+# Disable specific rules that might be too strict for Django
+ignore = [
+    "E501",   # line too long (handled by line-length setting)
+    "B008",   # Do not perform function calls in argument defaults (Django uses this pattern)
+    "B904",   # Allow raising exceptions without from inside except clauses
+    "DJ001",  # Avoid using null=True on string-based fields (sometimes needed)
+    "RET504", # Unnecessary variable assignment before return statement
+    "RET505", # Unnecessary else after return statement
+    "RET506", # Unnecessary else after raise statement
+
+    # Note: E1101 Instance of 'Style' has no 'SUCCESS', not a Ruff code
+    # Note: C0114 is a Pylint code (missing-module-docstring), not a Ruff code
+    # Ruff equivalent would be D100 from pydocstyle
+    "D100",  # missing-module-docstring (module docstring)
+]
+
+# Allow fix for all enabled rules
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[lint.per-file-ignores]
+# Ignore specific rules for specific files
+"__init__.py" = ["F401"]  # Allow unused imports in __init__.py files
+"*/settings.py" = ["F403", "F405"]  # Allow star imports in Django settings
+"*/test_*.py" = ["S101", "T201"]  # Allow assert statements and print in tests
+"*/tests.py" = ["S101", "T201"]   # Allow assert statements and print in tests
+"*/conftest.py" = ["F401"]        # Allow unused imports in conftest.py
+"main.py" = ["T201"]              # Allow print statements in main.py
+"pydj_auth/tests/test_docker_compose.py" = ["ALL"]  # Ignore all rules in docker_compose test file
+
+[lint.isort]
+# Django-compatible import sorting
+known-first-party = ["pydj_auth"]
+force-single-line = false
+combine-as-imports = true
+split-on-trailing-comma = true
+
+[lint.mccabe]
+# Complexity threshold
+max-complexity = 10
+
+[lint.pep8-naming]
+# Allow Django-style naming conventions
+classmethod-decorators = ["classmethod"]
+
+[format]
+# Use double quotes for strings
+quote-style = "double"
+
+# Use spaces around operators
+indent-style = "space"
+
+# Respect magic trailing commas
+skip-magic-trailing-comma = false
+
+# Automatically determine line endings
+line-ending = "auto"
+
+# Format docstrings
+docstring-code-format = true
+docstring-code-line-length = "dynamic"

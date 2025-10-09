@@ -1,0 +1,33 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.6
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix, --config, /dev/null]
+      - id: ruff-format
+        args: [--config, /dev/null]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.7.1
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-jinja2]
+        args: [--ignore-missing-imports]
+
+  - repo: local
+    hooks:
+      - id: commit-msg-format
+        name: Validate commit message format
+        entry: /opt/adam/scoffy/.venv/bin/python -c "import sys; msg = open(sys.argv[1]).read(); sys.exit(0 if msg.strip() and len(msg.split('\n')[0]) <= 72 else 1)"
+        language: system
+        stages: [commit-msg]
+        always_run: true

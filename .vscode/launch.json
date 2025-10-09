@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Ruff Fix",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "${workspaceFolder}/.venv/bin/ruff check --fix ${workspaceFolder}",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Ruff Format",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "${workspaceFolder}/.venv/bin/ruff format ${workspaceFolder}",
+            "cwd": "${workspaceFolder}"
+        },
+
+
+        {
+            "name": "Pre-commit Run All",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "pre-commit run --all-files",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

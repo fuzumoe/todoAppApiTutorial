@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "matangover.mypy",
+    "charliermarsh.ruff",
+    "ms-azuretools.vscode-docker",
+    "redhat.vscode-yaml",
+    "mongodb.mongodb-vscode",
+    "tamasfe.even-better-toml"
+  ]
+}
