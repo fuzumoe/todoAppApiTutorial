@@ -111,6 +111,10 @@ API GROUPS:
    pyjwt
    python-jose[cryptography] 
    passlib[bcrypt] 
+   pytest
+   pre-commit
+   ruff
+   mypy
 ```
 
 - SCAFFOLDING
@@ -152,8 +156,15 @@ todoApp
 ├─ main.py
 ├─ __init__.py
 ├─ .env.example
+├─ .pre-commit-config.yaml
+├─ .mypy.ini
+├─ .python-version
+├─ ruff.toml
+├─ uv.lock
 ├─ plan.md
 ├─ .gitignore
 ├─ pyproject.toml
+├─ docker-compose.yml
+├─ pytest.ini
 └─ README.md
 ```
