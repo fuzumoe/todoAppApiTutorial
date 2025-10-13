@@ -12,7 +12,25 @@ Actors:
  - USER
  - MANAGER
  - ADMIN
-  
+
+Activities:
+- USER RELATED ACTIVITIES
+   - CREATE USER
+   - UPDATE USER
+   - DELETE USER
+-  PROJECT RELATED ACTIVITIES
+   - CREATE PROJECT
+   - UPDATE PROJECT
+   - DELETE PROJECT
+- TASK RELATED ACTIVITIES
+   - CREATE TASK
+   - UPDATE TASK
+   - DELETE TASK
+- COMMON [ENUM]
+  - CREATE
+  - UPDATE 
+  - DELETE
+
 ENTITIES:
  - TASK
  - PROJECT
@@ -20,18 +38,44 @@ ENTITIES:
 MODEL:
  - USERS [WITH ROLES]
   - ID: [id] .....
-  - USERNAME: [username] ...
+  - FULL_NAME: [fullName] ...
   - EMAIL: [email] ....
   - PASSWORD: [password] ....
   - etc ....
-  - ROLES: [role] ....
+  - ROLES: [role:ENUM] ....
     - USER
     - MANAGER
     - ADMIN
+  - CREATED_AT: [createdAt:datetime]
+  - UPDATED_AT: [updatedAt:datetime]
+  - IS_ACTIVE: [isActive:boolean] 
  - TASK
-   - ...
+  - ID: [id] .....
+  - DESCRIPTION: [description]
+  - PROJECT_ID: [projectId:foreignKey]
+  - ASSIGNED_TO: [assignedTo:foreignKey]
+  - STATUS: [status:ENUM]
+    - ASSIGNED
+    - PENDING
+    - COMPLETED 
+  - CREATED_AT: [createdAt:datetime]
+  - UPDATED_AT: [updatedAt:datetime]
+  - IS_ACTIVE: [isActive:boolean] 
  - PROJECT
-   -  ....
+  - ID: [id] .....
+  - NAME: [name]
+  - DESCRIPTION: [description]
+  - OWNER_ID: [ownerId:foreignKey]
+  - CREATED_AT: [createdAt:datetime]
+  - UPDATED_AT: [updatedAt:datetime]
+  - IS_ACTIVE: [isActive:boolean] 
+- AUDIT
+  - ID: [id] .....
+  - ACTOR: [actor:foreignKey]
+  - ACTION: [action:general_activity]
+  - DETAIL: [detail:sub_activity]
+  - CREATED_AT: [createdAt:datetime]
+  - UPDATED_AT: [updatedAt:datetime]
 
 RELATIONS:
 - PROJECTS [MANY-ONE] MANAGER 
@@ -67,8 +111,11 @@ API GROUPS:
       - ADMIN [ALL]
       - MANAGER  [ALL]
       - USER [ALL]
-- etc .....
-  
+- etc ..... [tasks, audits]
+
+- BACKGROUND TASKS
+  - Audit background tasks
+ 
 - SCHEMAS [RESPONSE AND REQUEST]
   
   - USER [/user]
@@ -84,13 +131,28 @@ API GROUPS:
   - etc ...  
 
 - REPOSITORIES:
-   ....coming soon..........
+   - USERS [CLASS]
+     -
+     -  
+   - PROJECTS [CLASS]
+     -
+     -  
+   - TASKS [CLASS]
+     -
+     -  
+   - AUDIT [CLASS]
+     -
+     -  
 
 - SERVICES:
-   ....coming soon..........
-
+   - ORM SERVICE [super class]
+     -  USER [sub class]
+     -  projects [sub class]
+     - etc ...
+     - 
 - DEPENDENCIES:
-   ....coming soon..........
+  - AUTHENTICATION
+  - AUTHORIZATION
 
 - TESTS:
   - INTEGRATION
