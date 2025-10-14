@@ -1,0 +1,29 @@
+version: "3.9"
+# api [python]
+services:
+  api:
+    build:
+      context: .
+      dockerfile: dockerfile
+    env_file: .env
+    ports:
+      - "${APP_PORT}:8000"
+    volumes:
+      - app-logs:/var/log
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+mongo:
+  # fill in
+
+redis:
+  # fill in
+
+volumes:
+  mongo-data:
+  redis-data:
+  app-logs:

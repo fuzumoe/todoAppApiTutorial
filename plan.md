@@ -204,6 +204,7 @@ API GROUPS:
       LOG_HANDLERS=console,file
       LOG_DATE_FORMAT=%Y-%m-%d %H:%M:%S
       LOG_HANDLERS=console,file
+      
    - # Redis settings
       REDIS_HOST=localhost
       REDIS_PORT=6379
@@ -216,6 +217,7 @@ API GROUPS:
       REDIS_SOCKET_TIMEOUT=5
       REDIS_CONNECTION_POOL_MAX_CONNECTIONS=50
       REDIS_DECODE_RESPONSES=True
+
   - PLATFORM [DOCKER]
   - ORCHESTRATION: DOCKER COMPOSE
   - CONTAINERS
