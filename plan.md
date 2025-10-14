@@ -159,6 +159,70 @@ API GROUPS:
   - UNIT TEST [ IN THE FEATURE] 
    ....coming soon..........
 
+- Security
+  - AUTHENTICATION
+    - JWT [JSON WEB TOKEN]
+  - AUTHORIZATION   
+    - RBAC [ROLE BASED ACCESS CONTROL] 
+  - CACHE
+    - REDIS SESSION STORE
+
+- ENVIRONMENT
+  - APP VARIABLES 
+   - # Application settings
+      APP_NAME=Books Catalog API
+      APP_VERSION=0.1.0
+      APP_DESCRIPTION=A simple FastAPI application
+      APP_DEBUG=True
+      APP_HOST=127.0.0.1
+      APP_PORT=8000
+      APP_RELOAD=True
+      APP_API_DOCS_URL=/docs
+      APP_REDOC_URL=/redoc
+      APP_SCALARA_URL=/scalar
+      APP_OPENAPI_URL=/openapi.json
+
+   - # Security settings
+      SECURITY_SECRET_KEY=your_super_secret_key_here
+      SECURITY_JWT_ALGORITHM=HS256
+      SECURITY_ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+   - # database settings
+      DATABASE_HOST=localhost
+      DATABASE_PORT=27019
+      DATABASE_NAME=mydb
+      DATABASE_USER=root
+      DATABASE_PASSWORD=example
+      DATABASE_AUTH_SOURCE=admin
+
+   - # logger settings
+      LOG_LEVEL=debug
+      LOG_FORMAT=text #json #csv
+      LOG_FILE=/var/log/app.log
+      LOG_RETENTION=7d
+      LOG_ROTATION=1d
+      LOG_HANDLERS=console,file
+      LOG_DATE_FORMAT=%Y-%m-%d %H:%M:%S
+      LOG_HANDLERS=console,file
+   - # Redis settings
+      REDIS_HOST=localhost
+      REDIS_PORT=6379
+      REDIS_PASSWORD=???
+      REDIS_DB=0
+      REDIS_USERNAME=???
+      REDIS_SSL=False
+      REDIS_SSL_CERT_REQS=none
+      REDIS_SOCKET_CONNECT_TIMEOUT=5
+      REDIS_SOCKET_TIMEOUT=5
+      REDIS_CONNECTION_POOL_MAX_CONNECTIONS=50
+      REDIS_DECODE_RESPONSES=True
+  - PLATFORM [DOCKER]
+  - ORCHESTRATION: DOCKER COMPOSE
+  - CONTAINERS
+      - Python [LINUX CONTAINER FOR APP RUNNING]
+      - Mongodb [ DOCUMENT BASED DATABASE]
+      - Redis [ON MEMORY DATABASE]
+
 -  LIBRARIES:
 ```
    fastapi 
