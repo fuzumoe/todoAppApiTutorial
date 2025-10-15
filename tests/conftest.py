@@ -4,15 +4,27 @@ Pytest configuration and shared fixtures for Docker Compose e2e tests.
 
 # Additional wait to ensure API is fully initialized and ready for requests
 import contextlib
+import logging
+import tempfile
 import time
 from collections.abc import Callable, Generator
 from pathlib import Path
 from typing import Any
+from unittest.mock import patch
 
 # Additional wait to ensure API is fully initialized and ready for requests
 import pytest
 import requests
 from python_on_whales import DockerClient
+
+from app.core.config import settings
+
+# Import logger setup function
+from app.core.logging import get_logger
+
+# Initialize logger at test session start with a temporary log file
+with patch.object(settings, "log_file", tempfile.mktemp(suffix=".log")):
+    logger = get_logger(__name__)
 
 
 @pytest.fixture(scope="session")
@@ -98,28 +110,30 @@ def wait_for_healthy_containers(
                                 and str(health_obj.status) == "healthy"
                             )
                             service_health[service] = is_healthy
-                            print(
-                                f"DEBUG: service_health after assignment: {service_health}"
+                            logger.debug(
+                                f"service_health after assignment: {service_health}"
                             )
                             if is_healthy:
-                                print(f"✅ {service} ({container.name}) is healthy")
+                                logger.info(
+                                    f"✅ {service} ({container.name}) is healthy"
+                                )
                                 break  # Found healthy service, move to next service
 
-                            print(
+                            logger.debug(
                                 f"⏳ {service} ({container.name}) status: {container.state.status}, health: {container.state.health}"
                             )
 
                 # Check if all services are healthy
                 if all(service_health.values()):
-                    print(f"✅ All services healthy: {service_health}")
+                    logger.info(f"✅ All services healthy: {service_health}")
                     break
 
-                print(
+                logger.info(
                     f"Waiting for health checks... ({waited}/{max_wait}s) - Status: {service_health}"
                 )
 
             except Exception as e:
-                print(f"Error checking containers: {e}")
+                logger.error(f"Error checking containers: {e}")
 
         return service_health
 
@@ -153,13 +167,13 @@ def build(
     retry_interval = 2
     for i in range(max_retries):
         try:
-            print(f"Checking API availability (attempt {i + 1}/{max_retries})...")
+            logger.info(f"Checking API availability (attempt {i + 1}/{max_retries})...")
             response = requests.get("http://localhost:8000/health", timeout=2)
             if response.status_code == 200:
-                print(f"✅ API is fully available: {response.json()}")
+                logger.info(f"✅ API is fully available: {response.json()}")
                 break
         except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
-            print(f"API not yet available, waiting {retry_interval}s...")
+            logger.warning(f"API not yet available, waiting {retry_interval}s...")
             time.sleep(retry_interval)
 
     # Now yield control to the tests
