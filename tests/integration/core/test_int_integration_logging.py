@@ -1,8 +1,3 @@
-"""
-End-to-end tests for the logging module.
-Tests different logging formats (text, JSON, CSV) and handlers (console, file).
-"""
-
 import json
 import logging
 import os
@@ -73,9 +68,7 @@ def test_csv_formatter() -> None:
     parts = formatted.split(",")
 
     assert len(parts) == 4
-    # Check for INFO in one of the parts
     assert any(part.strip() == "INFO" for part in parts)
-    # Check for Test message in the last part
     assert "Test message" in parts[-1].strip()
 
 
@@ -96,13 +89,10 @@ def test_log_format_selection(
         patch.object(settings, "log_file", temp_log_file),
         patch.object(settings, "log_handlers_raw", "file"),
     ):
-        # Get a logger with the patched settings
         logger = get_logger("test_format")
 
-        # Add a test log entry
         logger.info("Test message for format selection")
 
-        # Verify that the root logger has a handler with the correct formatter
         assert len(logging.root.handlers) > 0
 
         formatter_found = False
@@ -124,13 +114,10 @@ def test_file_handler_with_rotation(temp_log_file: str) -> None:
         patch.object(settings, "log_rotation", "1d"),
         patch.object(settings, "log_retention", "7d"),
     ):
-        # Get a logger with the patched settings
         logger = get_logger("test_rotation")
 
-        # Log a test message
         logger.info("Test message for rotation")
 
-        # Verify that a TimedRotatingFileHandler was created
         rotating_handler_found = False
         for handler in logging.root.handlers:
             if isinstance(handler, TimedRotatingFileHandler):
@@ -145,13 +132,10 @@ def test_file_handler_with_rotation(temp_log_file: str) -> None:
 def test_console_handler() -> None:
     """Test that console handler outputs to stdout."""
     with patch.object(settings, "log_handlers_raw", "console"):
-        # Get a logger with the patched settings
         logger = get_logger("test_console")
 
-        # Log a test message
         logger.info("Test message for console output")
 
-        # Verify that a StreamHandler was created
         stream_handler_found = False
         for handler in logging.root.handlers:
             if (
@@ -170,14 +154,11 @@ def test_log_level_setting(temp_log_file: str) -> None:
         patch.object(settings, "log_level", "ERROR"),
         patch.object(settings, "log_file", temp_log_file),
     ):
-        # Get a logger with the patched settings
         logger = get_logger("test_level")
 
-        # Log messages at different levels to test
         logger.debug("Debug message should not appear")
         logger.error("Error message should appear")
 
-        # Verify that the root logger's level was set correctly
         assert logging.root.level == logging.ERROR
 
 
@@ -188,19 +169,15 @@ def test_integration_logging_flow(temp_log_file: str) -> None:
         patch.object(settings, "log_handlers_raw", "file"),
         patch.object(settings, "log_file", temp_log_file),
     ):
-        # Get a logger and log a message
         logger = get_logger("integration_test")
         logger.info("Integration test message")
 
-        # Read the log file and verify content
         with open(temp_log_file) as f:
             log_content = f.read()
 
-        # There should be at least 2 JSON objects (initialization + our message)
         log_lines = [line for line in log_content.strip().split("\n") if line]
         assert len(log_lines) >= 2
 
-        # Find our specific log message (may not be last if other tests ran)
         found_message = False
         for line in log_lines:
             try:
@@ -216,6 +193,3 @@ def test_integration_logging_flow(temp_log_file: str) -> None:
                 continue
 
         assert found_message, "Expected log message not found in log file"
-
-
-# End of tests

@@ -1,30 +1,23 @@
-"""
-Pytest configuration and shared fixtures for Docker Compose e2e tests.
-"""
+import os
+import tempfile
 
-# Additional wait to ensure API is fully initialized and ready for requests
+os.environ.setdefault("LOG_FILE", os.path.join(tempfile.gettempdir(), "test_app.log"))
+
 import contextlib
 import logging
-import tempfile
 import time
 from collections.abc import Callable, Generator
 from pathlib import Path
 from typing import Any
-from unittest.mock import patch
 
-# Additional wait to ensure API is fully initialized and ready for requests
 import pytest
 import requests
 from python_on_whales import DockerClient
 
 from app.core.config import settings
-
-# Import logger setup function
 from app.core.logging import get_logger
 
-# Initialize logger at test session start with a temporary log file
-with patch.object(settings, "log_file", tempfile.mktemp(suffix=".log")):
-    logger = get_logger(__name__)
+logger = get_logger(__name__)
 
 
 @pytest.fixture(scope="session")
@@ -35,8 +28,19 @@ def docker_client() -> DockerClient:
 
 
 @pytest.fixture(autouse=True)
-def docker_cleanup(docker_client: DockerClient) -> Generator[None, None, None]:
-    """Ensure clean state before and after each test."""
+def docker_cleanup(
+    request: Any, docker_client: DockerClient
+) -> Generator[None, None, None]:
+    """Ensure clean state before and after each test.
+
+    Skips cleanup for tests marked with 'no_docker_cleanup' to allow
+    tests to use external/standalone Docker services.
+    """
+    # Skip cleanup if test is marked with no_docker_cleanup
+    if "no_docker_cleanup" in request.keywords:
+        yield
+        return
+
     # Cleanup before test
     with contextlib.suppress(Exception):
         docker_client.compose.down(volumes=True, remove_orphans=True)
@@ -55,16 +59,6 @@ def wait_for_healthy_containers(
     """Helper fixture to wait for containers to become healthy."""
 
     def _wait_for_healthy(services: list[str], max_wait: int = 90) -> dict[str, bool]:
-        """
-        Wait for specified services to become healthy.
-
-        Args:
-            services: List of service names to wait for
-            max_wait: Maximum time to wait in seconds
-
-        Returns:
-            Dict mapping service names to their health status
-        """
         wait_interval = 5
         waited = 0
         service_health = dict.fromkeys(services, False)
