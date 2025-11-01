@@ -1,5 +1,8 @@
+from typing import ClassVar
+
 from beanie import Link
 from pydantic import Field
+from pymongo import ASCENDING, IndexModel
 
 from app.models.base import BaseDoc
 from app.models.enums import TaskStatus
@@ -14,4 +17,5 @@ class Task(BaseDoc):
     status: TaskStatus = Field(default=TaskStatus.PENDING, alias="status")
 
     class Settings:
-        name = "tasks"
+        name: ClassVar[str] = "tasks"  # collection
+        indexes: ClassVar[list[IndexModel]] = [IndexModel([("createdAt", ASCENDING)])]

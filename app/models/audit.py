@@ -1,5 +1,8 @@
+from typing import ClassVar
+
 from beanie import Link
 from pydantic import Field
+from pymongo import ASCENDING, IndexModel
 
 from app.models.base import BaseDoc
 from app.models.user import User
@@ -13,4 +16,5 @@ class Audit(BaseDoc):
     )  # sub_activity or extra info
 
     class Settings:
-        name = "audit"
+        name: ClassVar[str] = "audit"
+        indexes: ClassVar[list[IndexModel]] = [IndexModel([("createdAt", ASCENDING)])]

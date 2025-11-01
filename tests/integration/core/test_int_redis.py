@@ -38,7 +38,7 @@ async def cleanup_redis() -> AsyncGenerator[None, None]:
 
     # Cleanup after all tests
     if await _is_redis_available():
-        client = Redis.from_url(settings.redis_url, decode_responses=True)
+        client = Redis.from_url(settings.redis_url(), decode_responses=True)
         try:
             # Flush all test data
             await client.flushdb()
@@ -53,7 +53,7 @@ async def _is_redis_available() -> bool:
     """Check if Redis is available with a fast timeout."""
     try:
         client = Redis.from_url(
-            settings.redis_url,
+            settings.redis_url(),
             decode_responses=True,
             socket_connect_timeout=1,
         )
@@ -70,7 +70,7 @@ async def redis_client() -> AsyncGenerator[Redis, None]:
     if not await _is_redis_available():
         pytest.skip("Redis is not available")
 
-    client = Redis.from_url(settings.redis_url, decode_responses=True)
+    client = Redis.from_url(settings.redis_url(), decode_responses=True)
     yield client
     # Close after test
     await client.close()

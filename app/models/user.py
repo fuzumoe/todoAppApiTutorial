@@ -2,6 +2,7 @@ from typing import ClassVar
 
 from beanie import Indexed
 from pydantic import Field
+from pymongo import ASCENDING, IndexModel
 
 from app.models.base import BaseDoc
 from app.models.enums import Role
@@ -18,6 +19,8 @@ class User(BaseDoc):
 
     class Settings:
         name: ClassVar[str] = "users"  # collection
+
+        indexes: ClassVar[list[IndexModel]] = [IndexModel([("createdAt", ASCENDING)])]
 
     def __repr__(self) -> str:
         return f"<User {self.email} roles={self.roles}>"

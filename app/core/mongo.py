@@ -1,6 +1,7 @@
 import asyncio
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from typing import Any, cast
 
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
@@ -46,15 +47,18 @@ async def beanie_lifespan() -> AsyncIterator[None]:
     initializes **Beanie** with your Document models, then closes on shutdown.
     """
     global _client
-    _client = AsyncIOMotorClient(settings.mongodb_uri)
+    # settings.mongodb_uri is a string property, not a callable
+    mongodb_uri = str(settings.mongodb_uri)
+    _client = AsyncIOMotorClient(mongodb_uri)
 
     # Wait for Mongo to be reachable
     await _wait_for_mongo(_client)
 
     try:
+        db = cast(Any, _client[settings.database_name])
         await init_beanie(
-            database=_client[settings.database_name],
-            document_models=list(models),
+            database=db,
+            document_models=models,
         )
         yield
     finally:
