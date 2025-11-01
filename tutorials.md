@@ -17,6 +17,23 @@
    
     Passcode: %7eD*af6
 
-1. https://us06web.zoom.us/rec/share/w_T1K1PDtMVrMhJrobH37b6p6CQM4raniuyah8-PW7e66um8eFxQ21eS6C_ZA_IB.OmxUz2VkQjKEtcjR?startTime=1760459962000
+5. https://us06web.zoom.us/rec/share/w_T1K1PDtMVrMhJrobH37b6p6CQM4raniuyah8-PW7e66um8eFxQ21eS6C_ZA_IB.OmxUz2VkQjKEtcjR?startTime=1760459962000
     
-    Passcode: gVwT075%
+    Passcode: gVwT075%  
+   
+7. https://us06web.zoom.us/rec/share/s91Bbu-L7CGIfRDFMhs6hUgUnUMdp4Bta2buO_K4L898q7Mid58fgpjd3h32xLwH.XCY_Iz131GtU6ONQ?startTime=1761931014000  
+
+Passcode: E9@P40#G  
+
+7. https://us06web.zoom.us/rec/share/s91Bbu-L7CGIfRDFMhs6hUgUnUMdp4Bta2buO_K4L898q7Mid58fgpjd3h32xLwH.XCY_Iz131GtU6ONQ?startTime=1761931132000  
+
+Passcode: E9@P40#G  
+
+8. https://us06web.zoom.us/rec/share/s91Bbu-L7CGIfRDFMhs6hUgUnUMdp4Bta2buO_K4L898q7Mid58fgpjd3h32xLwH.XCY_Iz131GtU6ONQ?startTime=1761933323000  
+
+Passcode: E9@P40#G  
+
+9. https://us06web.zoom.us/rec/share/Cbhqqk7bsrpVAETRjlIFATfrppJiHaWmkzBCkakbNKHJgftMveQ-Id683eYQu_w.PcfAuLh0x-07pN_G?startTime=1760976668000  
+
+Passcode: 090%?PhG
+
