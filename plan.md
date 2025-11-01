@@ -118,17 +118,86 @@ API GROUPS:
  
 - SCHEMAS [RESPONSE AND REQUEST]
   
-  - USER [/user]
-     - POST REQUEST [/user]: [ UserPostRequest] .....
-       - username
-       - email 
-       - password
-       - etc
-     - POST RESPONSE [/user]: [ UserPostResponse] .....
-       -  message
-       -  status
-       -  etc
-  - etc ...  
+   Common primitives (used by all endpoints)
+    - ResponseEnvelope<T>
+       - status: "success" | "error"
+       - message: string
+       - data: T | null
+    - PageMeta
+       - total: number
+       - limit: number
+       - offset: number
+    - Page<T>
+       - items: T[]
+       - meta: PageMeta
+
+   Conventions
+    - Public JSON fields use camelCase for certain identifiers (e.g., ownerId, projectId, assignedTo, actorId).
+    - Internal models use snake_case with Pydantic aliases (validation_alias / serialization_alias) to map to/from the public JSON.
+    - Request models ignore unknown/extra fields.
+
+   - USER [/users]
+       - POST REQUEST [/users]: [UserPostRequest]
+          - username: string
+          - email: email
+          - password: string
+          - roles?: Role[] where Role ∈ { USER, MANAGER, ADMIN }
+       - POST RESPONSE [/users]: [UserPostResponse]
+          - envelope: ResponseEnvelope<UserRead>
+          - UserRead
+             - id: string
+             - username: string
+             - email: email
+             - roles: Role[]
+       - LIST RESPONSE [GET /users]
+          - envelope: ResponseEnvelope<Page<UserRead>>
+
+   - PROJECT [/project]
+       - POST REQUEST [/project]: [ProjectPostRequest]
+          - name: string
+          - description?: string
+          - ownerId: string
+       - POST RESPONSE [/project]: [ProjectPostResponse]
+          - envelope: ResponseEnvelope<ProjectRead>
+          - ProjectRead
+             - id: string
+             - name: string
+             - description?: string
+             - ownerId: string
+       - LIST RESPONSE [GET /project]
+          - envelope: ResponseEnvelope<Page<ProjectRead>>
+
+   - TASKS [/tasks]
+       - POST REQUEST [/tasks]: [TaskPostRequest]
+          - description: string
+          - projectId: string
+          - assignedTo?: string
+          - status?: TaskStatus where TaskStatus ∈ { ASSIGNED, PENDING, COMPLETED }
+       - POST RESPONSE [/tasks]: [TaskPostResponse]
+          - envelope: ResponseEnvelope<TaskRead>
+          - TaskRead
+             - id: string
+             - description: string
+             - projectId: string
+             - assignedTo?: string
+             - status: TaskStatus
+       - LIST RESPONSE [GET /tasks]
+          - envelope: ResponseEnvelope<Page<TaskRead>>
+
+   - AUDIT [/audits]
+       - POST REQUEST [/audits]: [AuditPostRequest]
+          - actorId: string
+          - action: string
+          - detail: string
+       - POST RESPONSE [/audits]: [AuditPostResponse]
+          - envelope: ResponseEnvelope<AuditRead>
+          - AuditRead
+             - id: string
+             - actorId: string
+             - action: string
+             - detail: string
+       - LIST RESPONSE [GET /audits]
+          - envelope: ResponseEnvelope<Page<AuditRead>>
 
 - REPOSITORIES:
    - USERS [CLASS]
