@@ -1,4 +1,4 @@
-from typing import ClassVar
+from typing import Annotated, ClassVar
 
 from beanie import Indexed
 from pydantic import Field
@@ -10,7 +10,8 @@ from app.models.enums import Role
 
 class User(BaseDoc):
     full_name: str = Field(..., alias="fullName")
-    email: Indexed(str, unique=True) = Field(..., alias="email")  # type: ignore[valid-type]
+    # Use Annotated to declare Beanie index metadata without tripping mypy
+    email: Annotated[str, Indexed(unique=True)] = Field(..., alias="email")
     # SECURITY NOTE: store a **hash**, not a plaintext password
     password_hash: str = Field(
         ..., alias="password"
