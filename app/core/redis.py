@@ -12,7 +12,7 @@ _redis: Redis | None = None
 
 
 def _build_redis() -> Redis:
-    kwargs: dict = {
+    kwargs: dict = {  
         "decode_responses": settings.redis_decode_responses,
         "socket_connect_timeout": settings.redis_socket_connect_timeout,
         "socket_timeout": settings.redis_socket_timeout,
@@ -31,16 +31,28 @@ def _build_redis() -> Redis:
         )
 
     redis_url = str(settings.redis_url)
-    return Redis.from_url(redis_url, **kwargs)
+    client =  Redis.from_url(redis_url, **kwargs)
+    return client   # connection object  = client
 
-
+# READINESS PROBE
 async def _wait_for_redis(
     client: Redis, *, attempts: int = 20, delay: float = 0.25
-) -> None:
+) -> bool | None:
     last_exc: Exception | None = None
+    
+    """
+    attempt 1:
+            pong = True
+            redis = ready
+            return True  
+    """
     for _ in range(attempts):
         try:
-            pong = await client.ping()
+            # ping = you pushing the ball redis
+            pong = await client.ping() # object tha represent redis db | connection object
+            # pong = redis pushing the bal back to you
+            # if pong is false = redis did no receive the ball or did nt push back the ball indicating redis is not ready
+            # if true = redis is alive and ready
             if pong:  # True / "PONG"
                 return
         except Exception as exc:  # pragma: no cover (startup path)
@@ -50,15 +62,18 @@ async def _wait_for_redis(
     raise RuntimeError("Redis not ready after retries") from last_exc
 
 
+# SINGLETON CONNECTION
 def get_redis() -> Redis:
     """
     Access the initialized Redis client. Call within app lifespan.
     """
-    if _redis is None:
+    if _client is None:
         raise RuntimeError("Redis client not initialized. Use within app lifespan.")
-    return _redis
+    return _client
 
-
+# lifespan 
+# redis should be ready =_wait_for_redis 
+# get redis need to get a built connection ? = _build_redis()
 @asynccontextmanager
 async def redis_lifespan() -> AsyncIterator[None]:
     """
@@ -70,15 +85,15 @@ async def redis_lifespan() -> AsyncIterator[None]:
             async with redis_lifespan():
                 yield
     """
-    global _redis
-    _redis = _build_redis()
-    await _wait_for_redis(_redis)
+    global _client 
+    _client = _build_redis() # redis client or connection object 
+    await _wait_for_redis(_client)
     try:
         yield
     finally:
-        if _redis is not None:
-            await _redis.close()
-            _redis = None
+        if _client is not None:
+            await _client.close()
+            _client = None
 
 
 # Session utilities (username key)

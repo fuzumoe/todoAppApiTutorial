@@ -93,6 +93,13 @@ class Settings(BaseSettings):
         elif self.redis_password and not self.redis_username:
             auth = f":{self.redis_password}@"
         return f"{scheme}://{auth}{self.redis_host}:{self.redis_port}/{self.redis_db}"
+        # SCHEMA = rediss
+        # auth = ""
+        # host = "localhost"
+        # port = 6379
+        #auth = f"{self.redis_username}:{self.redis_password}@"
+        # auth = "your_redis_username:your_redis_password@"
+        # rediss://your_redis_username:your_redis_password@localhost:6379/0
 
     @computed_field(return_type=list[str])
     def log_handlers(self) -> list[str]:

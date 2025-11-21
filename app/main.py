@@ -14,6 +14,8 @@ logger = get_logger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    # redis_lifespan
+    # beanie_lifespan
     yield
 
 
