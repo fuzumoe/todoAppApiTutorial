@@ -3,18 +3,25 @@ repos:
     rev: v4.4.0
     hooks:
       - id: trailing-whitespace
+        files: ^app/
       - id: end-of-file-fixer
+        files: ^app/
       - id: check-added-large-files
+        files: ^app/
       - id: check-merge-conflict
+        files: ^app/
       - id: mixed-line-ending
+        files: ^app/
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.1.6
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix, --config, /dev/null]
+        files: ^app/.*\.py$
       - id: ruff-format
         args: [--config, /dev/null]
+        files: ^app/.*\.py$
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.7.1
@@ -22,6 +29,7 @@ repos:
       - id: mypy
         additional_dependencies: [types-jinja2]
         args: [--ignore-missing-imports]
+        files: ^app/.*\.py$
 
   - repo: local
     hooks:

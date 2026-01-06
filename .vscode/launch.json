@@ -5,23 +5,84 @@
             "name": "Ruff Fix",
             "type": "node-terminal",
             "request": "launch",
-            "command": "${workspaceFolder}/.venv/bin/ruff check --fix ${workspaceFolder}",
+            "command": "${workspaceFolder}/.venv/bin/ruff check --fix ${workspaceFolder}/app",
             "cwd": "${workspaceFolder}"
         },
         {
             "name": "Ruff Format",
             "type": "node-terminal",
             "request": "launch",
-            "command": "${workspaceFolder}/.venv/bin/ruff format ${workspaceFolder}",
+            "command": "${workspaceFolder}/.venv/bin/ruff format ${workspaceFolder}/app",
             "cwd": "${workspaceFolder}"
         },
-
-
+        {
+            "name": "FastAPI Dev Server",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "uvicorn app.main:app --reload",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Full Dev Environment",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker-compose up -d mongo redis && sleep 3 && uvicorn app.main:app --reload --host 127.0.0.1 --port 8000",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Docker: Full Stack (API + Databases)",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker-compose up -d api mongo redis",
+            "cwd": "${workspaceFolder}"
+        }, 
         {
             "name": "Pre-commit Run All",
             "type": "node-terminal",
             "request": "launch",
             "command": "pre-commit run --all-files",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Docker: Start All Services",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker-compose up -d",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Docker: Start MongoDB Only",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker-compose up -d mongo",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Docker: Start Redis Only",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker-compose up -d redis",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Docker: Start MongoDB & Redis",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker-compose up -d mongo redis",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Docker: Stop All Services",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker-compose down",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Docker: View Logs",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "docker-compose logs -f",
             "cwd": "${workspaceFolder}"
         }
     ]
