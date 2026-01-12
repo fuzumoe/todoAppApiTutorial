@@ -1,11 +1,7 @@
-from typing import Any
+from typing import Any  # noqa: F401
 
-from .orm_service import ORMService
+from .orm_service import ORMService  # noqa: F401
 
 
-class TaskService(ORMService):
-    async def get_task(self, task_id: Any) -> Any | None:
-        return await self.get(task_id)
-
-    async def list_tasks(self, *, limit: int = 50, offset: int = 0) -> Any:
-        return await self.list(limit=limit, offset=offset)
+# class TaskService(...):
+#     pass
