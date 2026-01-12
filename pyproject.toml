@@ -7,6 +7,7 @@ requires-python = ">=3.13"
 dependencies = [
     "bcrypt>=5.0.0",
     "beanie>=2.0.0",
+    "email-validator>=2.1.1",
     "fastapi>=0.118.2",
     "httpcore==1.0.9",
     "httpx==0.28.1",
@@ -29,6 +30,4 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = [
-    "types-redis>=4.6.0.20241004",
-]
+dev = ["types-redis>=4.6.0.20241004"]
