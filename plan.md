@@ -213,16 +213,38 @@ API GROUPS:
      -
      -  
 
-- SERVICES:
-   - ORM SERVICE [super class]
-     -  USER [sub class]
-     -  projects [sub class]
-     - etc ...
-     - 
-- DEPENDENCIES:
-  - AUTHENTICATION
-  - AUTHORIZATION
-
+ - SERVICES:
+    - ORM SERVICE [super class]
+       - Path: `app/services/orm_service.py`
+       - Purpose: Thin layer over repositories providing consistent CRUD and pagination
+       - Methods: `create`, `get`, `list`, `update`, `delete`
+    - USER SERVICE [sub class]
+       - Path: `app/services/user_service.py`
+       - Purpose: User-specific operations on top of repository
+       - Methods: `create_user` (hashes password), `get_user`, `list_users`, `update_user`, `delete_user`, `get_by_email`
+    - PROJECT SERVICE [sub class]
+       - Path: `app/services/project_service.py`
+       - Purpose: Project operations
+       - Methods: `get_project`, `list_projects` (+ base CRUD)
+    - TASK SERVICE [sub class]
+       - Path: `app/services/task_service.py`
+       - Purpose: Task operations
+       - Methods: `get_task`, `list_tasks` (+ base CRUD)
+    - AUDIT SERVICE [sub class]
+       - Path: `app/services/audit_service.py`
+       - Purpose: Audit operations
+       - Methods: `get_audit`, `list_audits` (+ base CRUD)
+    - AUTHENTICATION SERVICE
+       - Path: `app/services/authentication.py`
+       - Purpose: Password hashing/verification and JWT token management
+       - Methods: `hash_password`, `verify_password`, `create_access_token`, `decode_access_token`
+    - AUTHORIZATION SERVICE
+       - Path: `app/services/authorization.py`
+       - Purpose: RBAC helpers and ownership checks for route protection
+       - Methods: `has_role`, `can_manage_user`
+    - MODULE INDEX
+       - Source: `app/services/__init__.py`
+       - Exports: `ORMService`, `UserService`, `ProjectService`, `TaskService`, `AuditService`, `hash_password`, `verify_password`, `create_access_token`, `decode_access_token`, `has_role`, `can_manage_user`
 - TESTS:
   - INTEGRATION
   - UNIT TEST [ IN THE FEATURE] 
@@ -343,7 +365,13 @@ todoApp
 │  │  └─ user_repo.py
 │  ├─ services/
 │  │  ├─ __init__.py
-│  │  └─ user_service.py
+│  │  ├─ orm_service.py
+│  │  ├─ user_service.py
+│  │  ├─ project_service.py
+│  │  ├─ task_service.py
+│  │  ├─ audit_service.py
+│  │  ├─ authentication.py
+│  │  └─ authorization.py
 │  └─ dependencies/
 │     ├─ __init__.py
 │     └─ auth.py
