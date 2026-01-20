@@ -1,6 +1,8 @@
 from typing import Any, Protocol, runtime_checkable
 
-from app.services.orm_service import ORMService
+from app.repositories.user import UserRepository
+
+from .orm_service import ORMService
 
 
 @runtime_checkable
@@ -9,7 +11,7 @@ class HasEmailRepository(Protocol):
         ...
 
 
-class UserService(ORMService):
+class UserService(ORMService[UserRepository]):
     async def create_user(self, data: dict[str, Any]) -> Any:
         return await self.create(data)
 

@@ -1,9 +1,11 @@
 from typing import Any
 
+from app.repositories.audit import AuditRepository
+
 from .orm_service import ORMService
 
 
-class AuditService(ORMService):
+class AuditService(ORMService[AuditRepository]):
     async def get_audit(self, audit_id: Any) -> Any | None:
         return await self.get(audit_id)
 
