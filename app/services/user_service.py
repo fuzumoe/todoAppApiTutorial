@@ -1,7 +1,6 @@
 from typing import Any, Protocol, runtime_checkable
 
-from .authentication import hash_password
-from .orm_service import ORMService
+from app.services.orm_service import ORMService
 
 
 @runtime_checkable
@@ -12,8 +11,6 @@ class HasEmailRepository(Protocol):
 
 class UserService(ORMService):
     async def create_user(self, data: dict[str, Any]) -> Any:
-        if data.get("password"):
-            data = {**data, "password": hash_password(str(data["password"]))}
         return await self.create(data)
 
     async def get_user(self, user_id: Any) -> Any | None:
