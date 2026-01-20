@@ -1,9 +1,10 @@
-from typing import Any
+from typing import Any  # isort: skip
 
-from .orm_service import ORMService
+from app.repositories.project import ProjectRepository
+from app.services.orm_service import ORMService
 
 
-class ProjectService(ORMService):
+class ProjectService(ORMService[ProjectRepository]):
     async def get_project(self, project_id: Any) -> Any | None:
         return await self.get(project_id)
 
